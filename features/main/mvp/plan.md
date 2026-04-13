@@ -1,0 +1,1 @@
+todos will be stored locally in the browser and no database will be used

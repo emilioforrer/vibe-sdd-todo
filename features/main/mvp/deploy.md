@@ -1,0 +1,1 @@
+Dockerize the app and add a docker-compose files and create the README.md with the instruction on how to run the app
