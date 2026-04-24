@@ -44,6 +44,13 @@ The current UI (retro 80s neo-purple theme) has several usability issues identif
 - Pressing **Cancel** or clicking outside the dialog dismisses it without deleting the task.
 - Pressing **Confirm** removes the task from the list.
 
+### 6. Pagination After 15 Items
+- The task list must paginate when there are more than 15 tasks.
+- Only 15 tasks are shown per page.
+- Pagination controls (Previous / Next, and current page indicator e.g. `Page 1 of 3`) must be displayed below the task list.
+- Pagination controls must follow the retro neo-purple visual style.
+- Drag and drop reordering (requirement 3) only applies within the current page.
+
 ## Design Constraints
 - All changes must stay within the existing retro 80s neo-purple (dark background, purple/pink neon accents) design language.
 - Tailwind CSS is the styling tool; no additional CSS frameworks should be introduced.
