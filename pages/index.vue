@@ -1,5 +1,16 @@
 <script setup lang="ts">
-const { todos, storageError, toggleTodo, deleteTodo } = useTodos()
+const {
+  paginatedTodos,
+  storageError,
+  currentPage,
+  totalPages,
+  toggleTodo,
+  deleteTodo,
+  reorderTodos,
+  setPage,
+} = useTodos()
+
+const PAGE_SIZE = 15
 
 const dismissStorageError = ref(false)
 const showStorageError = computed(() => storageError.value !== null && !dismissStorageError.value)
@@ -10,7 +21,7 @@ const showStorageError = computed(() => storageError.value !== null && !dismissS
     <div class="max-w-xl mx-auto flex flex-col gap-6">
 
       <!-- App Title -->
-      <h1 class="font-retro text-neon-purple text-center text-lg leading-relaxed shadow-neon-lg drop-shadow-[0_0_20px_#d946ef]">
+      <h1 class="font-retro text-neon-purple text-center text-lg leading-relaxed drop-shadow-[0_0_8px_#d946ef]">
         VIBE TODO
       </h1>
 
@@ -32,9 +43,19 @@ const showStorageError = computed(() => storageError.value !== null && !dismissS
       <div class="bg-dark-card border border-neon-violet rounded p-6 flex flex-col gap-6">
         <TodoInput />
         <TodoList
-          :todos="todos"
+          :todos="paginatedTodos"
           @toggle="toggleTodo"
           @delete="deleteTodo"
+          @reorder="(from, to) => reorderTodos(
+            from + (currentPage - 1) * PAGE_SIZE,
+            to + (currentPage - 1) * PAGE_SIZE,
+          )"
+        />
+        <PaginationControl
+          v-if="totalPages > 1"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          @page-change="setPage"
         />
       </div>
 

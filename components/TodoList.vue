@@ -8,6 +8,7 @@ defineProps<{
 const emit = defineEmits<{
   toggle: [id: string]
   delete: [id: string]
+  reorder: [fromIndex: number, toIndex: number]
 }>()
 </script>
 
@@ -29,11 +30,13 @@ const emit = defineEmits<{
     <!-- Todo List -->
     <ul v-else class="rounded overflow-hidden border border-neon-violet/30">
       <TodoItem
-        v-for="todo in todos"
+        v-for="(todo, index) in todos"
         :key="todo.id"
         :todo="todo"
+        :index="index"
         @toggle="emit('toggle', $event)"
         @delete="emit('delete', $event)"
+        @reorder="(from, to) => emit('reorder', from, to)"
       />
     </ul>
   </div>

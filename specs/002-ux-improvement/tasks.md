@@ -30,7 +30,7 @@
 
 **Purpose**: Confirm the existing app is functional before any changes.
 
-- [ ] T001 Verify baseline — run `npm run dev`, confirm existing todos create/complete/delete and persist to localStorage at key `vibe-todo:todos`
+- [X] T001 Verify baseline — run `npm run dev`, confirm existing todos create/complete/delete and persist to localStorage at key `vibe-todo:todos`
 
 ---
 
@@ -40,9 +40,9 @@
 
 **⚠️ CRITICAL**: US3 and US5 cannot begin until T002–T004 are complete.
 
-- [ ] T002 Add `order?: number` field to `Todo` interface in `types/todo.ts`
-- [ ] T003 Update `onMounted` handler in `composables/useTodos.ts` to backfill `order: index` for todos loaded from localStorage that lack the field — do NOT touch `createdAt` (must remain `undefined` for legacy tasks per FR-021)
-- [ ] T004 Update `addTodo` in `composables/useTodos.ts` to set `order: todos.value.length` on every newly created todo
+- [X] T002 Add `order?: number` field to `Todo` interface in `types/todo.ts`
+- [X] T003 Update `onMounted` handler in `composables/useTodos.ts` to backfill `order: index` for todos loaded from localStorage that lack the field — do NOT touch `createdAt` (must remain `undefined` for legacy tasks per FR-021)
+- [X] T004 Update `addTodo` in `composables/useTodos.ts` to set `order: todos.value.length` on every newly created todo
 
 **Checkpoint**: `Todo` type updated; existing todos gain `order` on next load; new todos persist `order`.
 
@@ -54,8 +54,8 @@
 
 **Independent Test**: Open app, verify `VIBE TODO` header glow is subtle/proportional. Create a task, verify `×` button is clearly visible (not hidden) at all times without hovering.
 
-- [ ] T005 [US1] Reduce neon glow on `<h1>` in `pages/index.vue` — replace `shadow-neon-lg drop-shadow-[0_0_20px_#d946ef]` with `shadow-neon-sm` (or equivalent smaller `drop-shadow` value) so glow is proportional to the heading size, not oversized
-- [ ] T006 [US1] Make delete button always visible in `components/TodoItem.vue` — remove `opacity-0 group-hover:opacity-100` classes; apply a consistently visible style with high contrast against the dark background (e.g., `text-neon-violet hover:text-red-400`)
+- [X] T005 [US1] Reduce neon glow on `<h1>` in `pages/index.vue` — replace `shadow-neon-lg drop-shadow-[0_0_20px_#d946ef]` with `shadow-neon-sm` (or equivalent smaller `drop-shadow` value) so glow is proportional to the heading size, not oversized
+- [X] T006 [US1] Make delete button always visible in `components/TodoItem.vue` — remove `opacity-0 group-hover:opacity-100` classes; apply a consistently visible style with high contrast against the dark background (e.g., `text-neon-violet hover:text-red-400`)
 
 **Checkpoint**: US1 fully testable — header glow is proportional; delete button visible at all times.
 
@@ -67,9 +67,9 @@
 
 **Independent Test**: Create a task — confirm relative time appears below label in small muted text. Hover over it — confirm tooltip shows absolute date. Refresh — confirm time persists. Check a legacy task (if any in localStorage) shows "Date unknown".
 
-- [ ] T007 [P] [US2] Add `formatRelativeTime(ts: number | undefined): string` helper export to `composables/useTodos.ts` — returns `'Date unknown'` when `ts` is falsy; otherwise uses `Intl.RelativeTimeFormat('en', { numeric: 'auto' })` with thresholds: seconds (<60s), minutes (<1h), hours (<1d), days (<30d), months (<1y), years
-- [ ] T008 [P] [US2] Add `formatAbsoluteTime(ts: number): string` helper export to `composables/useTodos.ts` — uses `Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })` to produce e.g. `"Apr 23, 2026 2:30 PM"`
-- [ ] T009 [US2] Update `components/TodoItem.vue` to display `createdAt` metadata — add a `<span>` below the task label showing `formatRelativeTime(todo.createdAt)` with `:title="todo.createdAt ? formatAbsoluteTime(todo.createdAt) : ''"` tooltip; style with `font-mono text-xs text-neon-violet/50` so it is subtly muted and does not compete with the task label
+- [X] T007 [P] [US2] Add `formatRelativeTime(ts: number | undefined): string` helper export to `composables/useTodos.ts` — returns `'Date unknown'` when `ts` is falsy; otherwise uses `Intl.RelativeTimeFormat('en', { numeric: 'auto' })` with thresholds: seconds (<60s), minutes (<1h), hours (<1d), days (<30d), months (<1y), years
+- [X] T008 [P] [US2] Add `formatAbsoluteTime(ts: number): string` helper export to `composables/useTodos.ts` — uses `Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })` to produce e.g. `"Apr 23, 2026 2:30 PM"`
+- [X] T009 [US2] Update `components/TodoItem.vue` to display `createdAt` metadata — add a `<span>` below the task label showing `formatRelativeTime(todo.createdAt)` with `:title="todo.createdAt ? formatAbsoluteTime(todo.createdAt) : ''"` tooltip; style with `font-mono text-xs text-neon-violet/50` so it is subtly muted and does not compete with the task label
 
 **Checkpoint**: US2 fully testable — creation date visible on all tasks; relative/absolute display correct; legacy tasks show "Date unknown".
 
@@ -83,9 +83,9 @@
 
 Note: Depends on Phase 3 (T006) — delete button must be visible to reach it.
 
-- [ ] T010 [US4] Create `components/ConfirmationDialog.vue` — `<Teleport to="body">` modal with `v-if="isOpen"`, backdrop `<div>` with `@click.self="$emit('cancel')"`, inner dialog panel with retro styling (`border border-neon-violet bg-dark-card font-mono`), message `"Are you sure you want to delete this task?"` plus `taskText` prop shown as secondary label, "Confirm" button (`@click="$emit('confirm')"`) and "Cancel" button (`@click="$emit('cancel')"`); mount/unmount `document.addEventListener('keydown', ...)` handler: `Escape` → emit `cancel`, `Enter` → emit `confirm`; props: `isOpen: boolean`, `taskText: string`; emits: `confirm`, `cancel`
-- [ ] T011 [US4] Update `components/TodoItem.vue` to gate deletion through `ConfirmationDialog` — add `showConfirm = ref(false)`; change delete button `@click` from `emit('delete', todo.id)` to `showConfirm.value = true`; add `<ConfirmationDialog :is-open="showConfirm" :task-text="todo.text" @confirm="() => { emit('delete', todo.id); showConfirm.value = false }" @cancel="showConfirm.value = false" />` inside the template
-- [ ] T012 [US4] Verify `components/TodoList.vue` correctly bubbles the `delete` event from `TodoItem` to its parent — existing `@delete="emit('delete', $event)"` binding should be sufficient; confirm no changes needed
+- [X] T010 [US4] Create `components/ConfirmationDialog.vue` — `<Teleport to="body">` modal with `v-if="isOpen"`, backdrop `<div>` with `@click.self="$emit('cancel')"`, inner dialog panel with retro styling (`border border-neon-violet bg-dark-card font-mono`), message `"Are you sure you want to delete this task?"` plus `taskText` prop shown as secondary label, "Confirm" button (`@click="$emit('confirm')"`) and "Cancel" button (`@click="$emit('cancel')"`); mount/unmount `document.addEventListener('keydown', ...)` handler: `Escape` → emit `cancel`, `Enter` → emit `confirm`; props: `isOpen: boolean`, `taskText: string`; emits: `confirm`, `cancel`
+- [X] T011 [US4] Update `components/TodoItem.vue` to gate deletion through `ConfirmationDialog` — add `showConfirm = ref(false)`; change delete button `@click` from `emit('delete', todo.id)` to `showConfirm.value = true`; add `<ConfirmationDialog :is-open="showConfirm" :task-text="todo.text" @confirm="() => { emit('delete', todo.id); showConfirm.value = false }" @cancel="showConfirm.value = false" />` inside the template
+- [X] T012 [US4] Verify `components/TodoList.vue` correctly bubbles the `delete` event from `TodoItem` to its parent — existing `@delete="emit('delete', $event)"` binding should be sufficient; confirm no changes needed
 
 **Checkpoint**: US4 fully testable — confirmation dialog appears on every delete attempt; all confirmation/cancellation paths work; retro styling applied.
 
@@ -99,13 +99,13 @@ Note: Depends on Phase 3 (T006) — delete button must be visible to reach it.
 
 Note: Requires Phase 2 (T002–T004) for `order` field. Builds on Phase 3 (TodoItem stable).
 
-- [ ] T013 [US3] Add `reorderTodos(fromIndex: number, toIndex: number): void` to `composables/useTodos.ts` — splice-insert the item from `fromIndex` to `toIndex`, then remap each todo's `order` field to its new array index, then call `persist()`; guard: no-op if `fromIndex === toIndex` or out-of-bounds
-- [ ] T014 [US3] Add `index: number` prop to `components/TodoItem.vue`; add drag handle `<span>` element (`⠿`) with classes `cursor-grab select-none text-neon-violet/60 hover:text-neon-violet font-mono shrink-0` always visible (not hover-only); add `touch-action: none` inline style on handle span to prevent browser scroll capture
-- [ ] T015 [US3] Add desktop HTML5 DnD events to `components/TodoItem.vue` — set `draggable="true"` on root `<li>`; `@dragstart`: set `dataTransfer.effectAllowed = 'move'` and store `props.index`; `@dragover.prevent`: set drop effect; `@drop.prevent.stop`: read source index from `dataTransfer`, emit `reorder` if different from `props.index`; `@dragend`: clear drag CSS class
-- [ ] T016 [US3] Add visual drag active state to `components/TodoItem.vue` — bind a reactive `isDragging` ref as a CSS class on the root `<li>` (`scale-105 opacity-60 shadow-neon-sm z-10`) that is set `true` on `dragstart` / long-press activation and `false` on `dragend` / `pointerup`
-- [ ] T017 [US3] Add mobile Pointer Events long-press drag to `components/TodoItem.vue` — on drag handle: `@pointerdown`: record `startY`, start 500ms `setTimeout`; if `pointerType === 'touch'`, call `event.currentTarget.setPointerCapture(event.pointerId)` in the timer callback; `@pointermove`: if timer still pending and `|clientY − startY| > 10`, cancel timer (scroll intent); if dragging, compute drop target from `clientY` and store pending `dropIndex`; `@pointerup` / `@pointercancel`: clear timer; if dragging and `dropIndex !== props.index`, emit `reorder`; set `isDragging = false`
-- [ ] T018 [P] [US3] Update `components/TodoList.vue` — pass `:index="index"` to `TodoItem` in the `v-for` loop; add `@reorder="emit('reorder', $event[0], $event[1])"` (or use `(from, to)` destructure) to bubble the event to the page; add `reorder` to the `defineEmits` declaration
-- [ ] T019 [US3] Update `pages/index.vue` — destructure `reorderTodos` from `useTodos()`; bind `@reorder="(from, to) => reorderTodos(from, to)"` on `<TodoList>`
+- [X] T013 [US3] Add `reorderTodos(fromIndex: number, toIndex: number): void` to `composables/useTodos.ts` — splice-insert the item from `fromIndex` to `toIndex`, then remap each todo's `order` field to its new array index, then call `persist()`; guard: no-op if `fromIndex === toIndex` or out-of-bounds
+- [X] T014 [US3] Add `index: number` prop to `components/TodoItem.vue`; add drag handle `<span>` element (`⠿`) with classes `cursor-grab select-none text-neon-violet/60 hover:text-neon-violet font-mono shrink-0` always visible (not hover-only); add `touch-action: none` inline style on handle span to prevent browser scroll capture
+- [X] T015 [US3] Add desktop HTML5 DnD events to `components/TodoItem.vue` — set `draggable="true"` on root `<li>`; `@dragstart`: set `dataTransfer.effectAllowed = 'move'` and store `props.index`; `@dragover.prevent`: set drop effect; `@drop.prevent.stop`: read source index from `dataTransfer`, emit `reorder` if different from `props.index`; `@dragend`: clear drag CSS class
+- [X] T016 [US3] Add visual drag active state to `components/TodoItem.vue` — bind a reactive `isDragging` ref as a CSS class on the root `<li>` (`scale-105 opacity-60 shadow-neon-sm z-10`) that is set `true` on `dragstart` / long-press activation and `false` on `dragend` / `pointerup`
+- [X] T017 [US3] Add mobile Pointer Events long-press drag to `components/TodoItem.vue` — on drag handle: `@pointerdown`: record `startY`, start 500ms `setTimeout`; if `pointerType === 'touch'`, call `event.currentTarget.setPointerCapture(event.pointerId)` in the timer callback; `@pointermove`: if timer still pending and `|clientY − startY| > 10`, cancel timer (scroll intent); if dragging, compute drop target from `clientY` and store pending `dropIndex`; `@pointerup` / `@pointercancel`: clear timer; if dragging and `dropIndex !== props.index`, emit `reorder`; set `isDragging = false`
+- [X] T018 [P] [US3] Update `components/TodoList.vue` — pass `:index="index"` to `TodoItem` in the `v-for` loop; add `@reorder="emit('reorder', $event[0], $event[1])"` (or use `(from, to)` destructure) to bubble the event to the page; add `reorder` to the `defineEmits` declaration
+- [X] T019 [US3] Update `pages/index.vue` — destructure `reorderTodos` from `useTodos()`; bind `@reorder="(from, to) => reorderTodos(from, to)"` on `<TodoList>`
 
 **Checkpoint**: US3 fully testable — drag handle visible; desktop drag-drop reorders list; mobile long-press activates drag mode; order persists after refresh.
 
@@ -119,10 +119,10 @@ Note: Requires Phase 2 (T002–T004) for `order` field. Builds on Phase 3 (TodoI
 
 Note: Requires Phase 2 (T002–T004) for `order`; T023 adjusts Phase 6's reorder index wiring.
 
-- [ ] T020 [US5] Add pagination state to `composables/useTodos.ts` — add `const PAGE_SIZE = 15`; `const currentPage = ref(1)`; `const totalPages = computed(() => Math.max(1, Math.ceil(todos.value.length / PAGE_SIZE)))`; `const paginatedTodos = computed(() => todos.value.slice((currentPage.value - 1) * PAGE_SIZE, currentPage.value * PAGE_SIZE))`; `function setPage(n: number) { currentPage.value = Math.min(Math.max(1, n), totalPages.value) }`; add `watch(() => todos.value.length, () => { currentPage.value = Math.min(currentPage.value, totalPages.value) })`; expose `paginatedTodos`, `currentPage`, `totalPages`, `setPage` in the return object
-- [ ] T021 [P] [US5] Create `components/PaginationControl.vue` — props: `currentPage: number`, `totalPages: number`; emits: `page-change: [page: number]`; template: "Previous" button (disabled when `currentPage === 1`, `@click="$emit('page-change', currentPage - 1)"`), "Page X of Y" `<span>` in `font-retro text-xs text-neon-violet`, "Next" button (disabled when `currentPage === totalPages`, `@click="$emit('page-change', currentPage + 1)"`); retro styling consistent with existing UI (border `neon-violet`, background `dark-card`, hover `neon-purple`)
-- [ ] T022 [US5] Update `pages/index.vue` — destructure `paginatedTodos`, `currentPage`, `totalPages`, `setPage` from `useTodos()`; change `<TodoList :todos="todos"` to `<TodoList :todos="paginatedTodos"`; add `<PaginationControl v-if="totalPages > 1" :current-page="currentPage" :total-pages="totalPages" @page-change="setPage" />` below `<TodoList>`
-- [ ] T023 [US5] Update `@reorder` handler in `pages/index.vue` to translate page-local indexes to absolute list indexes — change to `(from, to) => reorderTodos(from + (currentPage.value - 1) * PAGE_SIZE, to + (currentPage.value - 1) * PAGE_SIZE)`
+- [X] T020 [US5] Add pagination state to `composables/useTodos.ts` — add `const PAGE_SIZE = 15`; `const currentPage = ref(1)`; `const totalPages = computed(() => Math.max(1, Math.ceil(todos.value.length / PAGE_SIZE)))`; `const paginatedTodos = computed(() => todos.value.slice((currentPage.value - 1) * PAGE_SIZE, currentPage.value * PAGE_SIZE))`; `function setPage(n: number) { currentPage.value = Math.min(Math.max(1, n), totalPages.value) }`; add `watch(() => todos.value.length, () => { currentPage.value = Math.min(currentPage.value, totalPages.value) })`; expose `paginatedTodos`, `currentPage`, `totalPages`, `setPage` in the return object
+- [X] T021 [P] [US5] Create `components/PaginationControl.vue` — props: `currentPage: number`, `totalPages: number`; emits: `page-change: [page: number]`; template: "Previous" button (disabled when `currentPage === 1`, `@click="$emit('page-change', currentPage - 1)"`), "Page X of Y" `<span>` in `font-retro text-xs text-neon-violet`, "Next" button (disabled when `currentPage === totalPages`, `@click="$emit('page-change', currentPage + 1)"`); retro styling consistent with existing UI (border `neon-violet`, background `dark-card`, hover `neon-purple`)
+- [X] T022 [US5] Update `pages/index.vue` — destructure `paginatedTodos`, `currentPage`, `totalPages`, `setPage` from `useTodos()`; change `<TodoList :todos="todos"` to `<TodoList :todos="paginatedTodos"`; add `<PaginationControl v-if="totalPages > 1" :current-page="currentPage" :total-pages="totalPages" @page-change="setPage" />` below `<TodoList>`
+- [X] T023 [US5] Update `@reorder` handler in `pages/index.vue` to translate page-local indexes to absolute list indexes — change to `(from, to) => reorderTodos(from + (currentPage.value - 1) * PAGE_SIZE, to + (currentPage.value - 1) * PAGE_SIZE)`
 
 **Checkpoint**: US5 fully testable — 15 tasks per page; Previous/Next navigation works; page resets when task count drops below threshold; drag-and-drop stays page-local.
 
@@ -132,9 +132,9 @@ Note: Requires Phase 2 (T002–T004) for `order`; T023 adjusts Phase 6's reorder
 
 **Purpose**: Visual consistency, lint pass, end-to-end verification.
 
-- [ ] T024 [P] Visual consistency audit — review all modified/new components (`TodoItem.vue`, `ConfirmationDialog.vue`, `PaginationControl.vue`, `pages/index.vue`) to confirm all new elements use only existing Tailwind tokens (`neon-purple`, `neon-violet`, `dark-card`, `dark-bg`, `font-retro`, `font-mono`, `shadow-neon-sm/md/lg`) per FR-020 and Constitution §II; no hardcoded hex values or raw CSS files added
-- [ ] T025 [P] Run `npm run lint` from repository root and resolve all TypeScript and ESLint errors across `types/todo.ts`, `composables/useTodos.ts`, `components/TodoItem.vue`, `components/TodoList.vue`, `components/ConfirmationDialog.vue`, `components/PaginationControl.vue`, `pages/index.vue`
-- [ ] T026 Run through `specs/002-ux-improvement/quickstart.md` testing checklist — verify all acceptance scenarios for US1–US5; document any failures as follow-up issues
+- [X] T024 [P] Visual consistency audit — review all modified/new components (`TodoItem.vue`, `ConfirmationDialog.vue`, `PaginationControl.vue`, `pages/index.vue`) to confirm all new elements use only existing Tailwind tokens (`neon-purple`, `neon-violet`, `dark-card`, `dark-bg`, `font-retro`, `font-mono`, `shadow-neon-sm/md/lg`) per FR-020 and Constitution §II; no hardcoded hex values or raw CSS files added
+- [X] T025 [P] Run `npm run lint` from repository root and resolve all TypeScript and ESLint errors across `types/todo.ts`, `composables/useTodos.ts`, `components/TodoItem.vue`, `components/TodoList.vue`, `components/ConfirmationDialog.vue`, `components/PaginationControl.vue`, `pages/index.vue`
+- [X] T026 Run through `specs/002-ux-improvement/quickstart.md` testing checklist — verify all acceptance scenarios for US1–US5; document any failures as follow-up issues
 
 ---
 
