@@ -1,0 +1,11 @@
+name: vibe-todo
+version: 1.0.0
+description: APM project for vibe-todo
+author: Emilio Forrer
+dependencies:
+  apm:
+  - https://github.com/vuejs-ai/skills
+  - microsoft/apm-sample-package#v1.0.0
+  - anthropics/skills/skills/frontend-design
+  mcp: []
+scripts: {}

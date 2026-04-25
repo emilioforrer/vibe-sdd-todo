@@ -29,3 +29,6 @@ Thumbs.db
 eslint-report.json
 coverage/
 dist
+
+# APM dependencies
+apm_modules/

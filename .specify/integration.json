@@ -1,4 +1,7 @@
 {
-  "integration": "kilocode",
-  "version": "0.8.0"
+  "integration": "codex",
+  "version": "0.5.1",
+  "scripts": {
+    "update-context": ".specify/integrations/codex/scripts/update-context.sh"
+  }
 }

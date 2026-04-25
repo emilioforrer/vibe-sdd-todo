@@ -76,6 +76,18 @@ tasks:
     cmds:
       - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -w /workspace anchore/grype:latest dir:/workspace -o sarif --file devops/security/grype-reports/grype-results.sarif --exclude './node_modules/**' --exclude './.nuxt/**' --exclude './.output/**' --exclude './dist/**' --exclude './build/**' --exclude './coverage/**' --exclude './devops/**' --exclude './.git/**' --exclude './.worktrees/**' --exclude './.specify/**' --exclude './.crush/**' --exclude './.kilocode/**' --exclude './specs/**' --exclude './features/**'
 
+  ai:install:
+    desc: Install APM dependencies
+    dir: .
+    cmds:
+      - apm install
+
+  ai:compile:
+    desc: Compile APM primitives without constitution
+    dir: .
+    cmds:
+      - apm compile --no-constitution
+
   snyk:
     desc: Run Snyk dependency and code security tests
     dir: .
