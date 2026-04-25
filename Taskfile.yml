@@ -1,0 +1,84 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+
+
+tasks:
+
+  up:
+    desc: Start app and security services (SonarQube, etc.) via docker-compose
+    dir: .
+    cmds:
+      - docker-compose -f docker-compose.yml -f devops/security/docker-compose.yml --profile services up
+
+  up:v1:
+    desc: Start the v0.1.0 worktree app via its docker-compose
+    deps: [clone:vibe-sdd-todo-v1]
+    dir: .worktrees/vibe-sdd-todo-v1
+    cmds:
+      - docker-compose -f docker-compose.yml up
+
+  clone:vibe-sdd-todo-v1:
+    desc: Add a git worktree of vibe-sdd-todo @ tag v0.1.0 at .worktrees/vibe-sdd-todo-v1
+    dir: .
+    vars:
+      REPO_URL: https://github.com/emilioforrer/vibe-sdd-todo
+      BARE_DIR: .worktrees/.bare/vibe-sdd-todo.git
+      WORKTREE_DIR: .worktrees/vibe-sdd-todo-v1
+      TAG: v0.1.0
+    cmds:
+      - mkdir -p .worktrees/.bare
+      - test -d {{.BARE_DIR}} || git clone --bare {{.REPO_URL}} {{.BARE_DIR}}
+      - git --git-dir={{.BARE_DIR}} fetch --tags origin
+      - git --git-dir={{.BARE_DIR}} worktree add --detach {{.WORKTREE_DIR}} refs/tags/{{.TAG}}
+    status:
+      - test -d {{.WORKTREE_DIR}}
+
+  ci:
+    desc: Run lint, test coverage, and SonarQube analysis
+    cmds:
+      - task: lint
+      - task: test:coverage
+      - task: sonar-scanner
+
+  lint:
+    desc: Run ESLint and produce a JSON report consumed by SonarQube
+    dir: .
+    cmds:
+      - npm run lint:report
+    generates:
+      - eslint-report.json
+
+  test:coverage:
+    desc: Run unit tests with coverage (lcov report consumed by SonarQube)
+    dir: .
+    cmds:
+      - npm run test:coverage
+    generates:
+      - coverage/lcov.info
+
+  sonar-scanner:
+    desc: Run SonarQube analysis using sonar-scanner-cli Docker image
+    dir: .
+    cmds:
+      - docker run --rm --network sonar-network --env-file devops/security/.env -v $(pwd)/:/usr/src -v $(pwd)/coverage:/usr/src/coverage -w /usr/src sonarsource/sonar-scanner-cli sonar-scanner -X
+
+  trivy:
+    desc: Run Trivy vulnerability, misconfiguration, and secret scan
+    dir: .
+    cmds:
+      - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -v trivy-cache:/root/.cache/trivy -w /workspace aquasec/trivy:latest fs --skip-version-check --scanners vuln,misconfig,secret -f sarif -o devops/security/trivy-reports/trivy-results.sarif --skip-dirs "build,devops,docs,out" --skip-files "key.properties,**/build/reports/kover/reportDebug.xml" .
+
+  grype:
+    desc: Run Grype vulnerability scan and output SARIF report
+    dir: .
+    cmds:
+      - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -w /workspace anchore/grype:latest dir:/workspace -o sarif --file devops/security/grype-reports/grype-results.sarif --exclude './build/**'
+
+  snyk:
+    desc: Run Snyk dependency and code security tests
+    dir: .
+    cmds:
+      - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -w /workspace snyk/snyk:gradle-8-jdk17 sh -c "snyk test --json-file-output=devops/security/snyk-reports/snyk-results.json --sarif-file-output=devops/security/snyk-reports/snyk-results.sarif . || true && snyk code test --json-file-output=devops/security/snyk-reports/snyk-code-results.json --sarif-file-output=devops/security/snyk-reports/snyk-code-results.sarif . || true"
+

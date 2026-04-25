@@ -13,68 +13,49 @@ A retro neo purple 80s-themed todo tracking web app built with **Vue 3**, **Nuxt
 
 ---
 
-## Running with Docker (recommended)
 
-**Prerequisites**: [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 
-```bash
-docker compose up --build
-```
+## Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000).
-
-To stop:
-
-```bash
-docker compose down
-```
+- [Node.js](https://nodejs.org/) (for local development)
+- [Docker & Docker Compose](https://docs.docker.com/get-docker/)
+- [Task](https://taskfile.dev/) (task runner)
 
 ---
 
-## Running locally
+## Run
 
-**Prerequisites**: [Node.js](https://nodejs.org/) 20+ and npm
+### Docker (production build)
 
-### Install dependencies
-
-```bash
-npm install
-```
-
-### Development server
+Start the app along with security services (SonarQube, etc.):
 
 ```bash
-npm run dev
+task up
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The server hot-reloads on file changes.
+The app will be available at **http://localhost:3002**.
 
-### Production build (static)
+
+### V1 side-by-side comparison
+
+To run the original v0.1.0 alongside the latest version (in a separate terminal):
 
 ```bash
-npm run generate
+task up:v1
 ```
 
-Static output is written to `.output/public/` and can be deployed to any static host (Netlify, Vercel, GitHub Pages, etc.).
-
-To preview the production build locally:
-
-```bash
-npx serve .output/public
-```
+> This automatically clones the [vibe-sdd-todo](https://github.com/emilioforrer/vibe-sdd-todo) repo as a git worktree at `.worktrees/vibe-sdd-todo-v1` if it doesn't already exist.
 
 ---
 
-## Project structure
+## Other Tasks
 
-```
-pages/index.vue          # Main app page
-components/
-  TodoInput.vue          # Add-todo form with character counter
-  TodoList.vue           # Todo list with empty state
-  TodoItem.vue           # Single todo row (checkbox, text, delete)
-composables/useTodos.ts  # State management + localStorage persistence
-types/todo.ts            # Todo TypeScript interface
-tailwind.config.ts       # Retro purple theme, neon glow utilities
-nuxt.config.ts           # Nuxt configuration
-```
+| Command              | Description                                      |
+| -------------------- | ------------------------------------------------ |
+| `task ci`            | Run lint, test coverage, and SonarQube analysis  |
+| `task lint`          | Run ESLint and produce a JSON report             |
+| `task test:coverage` | Run unit tests with coverage (lcov)              |
+| `task sonar-scanner` | Run SonarQube analysis                           |
+| `task trivy`         | Run Trivy vulnerability & secret scan            |
+| `task grype`         | Run Grype vulnerability scan (SARIF output)      |
+| `task snyk`          | Run Snyk dependency and code security tests      |

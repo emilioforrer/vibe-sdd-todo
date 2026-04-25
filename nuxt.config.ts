@@ -3,7 +3,14 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
+    '@nuxt/eslint',
   ],
+
+  eslint: {
+    config: {
+      stylistic: false,
+    },
+  },
 
   googleFonts: {
     families: {

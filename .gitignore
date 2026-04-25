@@ -25,3 +25,7 @@ Thumbs.db
 
 # TypeScript
 *.tsbuildinfo
+
+eslint-report.json
+coverage/
+dist
