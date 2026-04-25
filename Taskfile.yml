@@ -68,17 +68,17 @@ tasks:
     desc: Run Trivy vulnerability, misconfiguration, and secret scan
     dir: .
     cmds:
-      - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -v trivy-cache:/root/.cache/trivy -w /workspace aquasec/trivy:latest fs --skip-version-check --scanners vuln,misconfig,secret -f sarif -o devops/security/trivy-reports/trivy-results.sarif --skip-dirs "build,devops,docs,out" --skip-files "key.properties,**/build/reports/kover/reportDebug.xml" .
+      - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -v trivy-cache:/root/.cache/trivy -w /workspace aquasec/trivy:latest fs --skip-version-check --scanners vuln,misconfig,secret -f sarif -o devops/security/trivy-reports/trivy-results.sarif --skip-dirs "node_modules,.nuxt,.output,dist,build,coverage,devops,.git,.worktrees,.github,.specify,.crush,.kilocode,.vscode,specs,features" .
 
   grype:
     desc: Run Grype vulnerability scan and output SARIF report
     dir: .
     cmds:
-      - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -w /workspace anchore/grype:latest dir:/workspace -o sarif --file devops/security/grype-reports/grype-results.sarif --exclude './build/**'
+      - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -w /workspace anchore/grype:latest dir:/workspace -o sarif --file devops/security/grype-reports/grype-results.sarif --exclude './node_modules/**' --exclude './.nuxt/**' --exclude './.output/**' --exclude './dist/**' --exclude './build/**' --exclude './coverage/**' --exclude './devops/**' --exclude './.git/**' --exclude './.worktrees/**' --exclude './.specify/**' --exclude './.crush/**' --exclude './.kilocode/**' --exclude './specs/**' --exclude './features/**'
 
   snyk:
     desc: Run Snyk dependency and code security tests
     dir: .
     cmds:
-      - docker run --rm --env-file devops/security/.env -v $(pwd)/:/workspace -w /workspace snyk/snyk:gradle-8-jdk17 sh -c "snyk test --json-file-output=devops/security/snyk-reports/snyk-results.json --sarif-file-output=devops/security/snyk-reports/snyk-results.sarif . || true && snyk code test --json-file-output=devops/security/snyk-reports/snyk-code-results.json --sarif-file-output=devops/security/snyk-reports/snyk-code-results.sarif . || true"
+      - docker run --rm --entrypoint sh --env-file devops/security/.env -v $(pwd)/:/workspace -w /workspace snyk/snyk:node -c "snyk test --json-file-output=devops/security/snyk-reports/snyk-results.json --sarif-file-output=devops/security/snyk-reports/snyk-results.sarif . || true && snyk code test --exclude=node_modules,.nuxt,.output,dist,build,coverage,devops,.git,.worktrees,.github,.specify,.crush,.kilocode,.vscode,specs,features --json-file-output=devops/security/snyk-reports/snyk-code-results.json --sarif-file-output=devops/security/snyk-reports/snyk-code-results.sarif . || true"
 
