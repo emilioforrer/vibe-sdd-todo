@@ -1,0 +1,11 @@
+[tools]
+"github:microsoft/apm" = "latest"
+go = "latest"
+node = "latest"
+python = "latest"
+task = "latest"
+uv = "latest"
+
+[tasks.install-speckit]
+description = "Install Spec Kit (specify-cli) via uv"
+run = "uv tool install specify-cli --from git+https://github.com/github/spec-kit.git"
