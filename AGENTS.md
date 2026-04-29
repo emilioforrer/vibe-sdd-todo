@@ -5,7 +5,7 @@
 <!-- Source: local -->
 
 <!-- SPEC-KIT CONSTITUTION: BEGIN -->
-hash: cf5c5831d32e path: .specify/memory/constitution.md
+hash: 7e7e6ed93f0c path: .specify/memory/constitution.md
 <!--
   Sync Impact Report
   ==================================================
@@ -41,17 +41,17 @@ All UI MUST be built as composable Vue single-file components
 - Shared state MUST use Vue composables in `composables/`.
 - No direct DOM manipulation outside Vue's reactivity system.
 
-### II. Retro 80s Design Consistency
+### II. Figma-Driven Design Consistency
 
-The visual identity MUST maintain a consistent 80s retro
-aesthetic across every screen and interaction.
+The visual identity MUST follow the Figma design file as the
+single source of truth for all UI decisions.
 
 - All styling MUST use Tailwind CSS utility classes; no raw CSS
   files unless extending Tailwind's configuration.
-- Color palette, typography, and visual effects MUST evoke an
-  80s aesthetic (neon accents, grid patterns, retro fonts).
+- Color palette, typography, and visual effects MUST match the
+  current Figma design specifications.
 - New UI elements MUST be reviewed for visual coherence with
-  the established retro design system before merging.
+  the Figma design system before merging.
 
 ### III. Technology Stack Discipline
 
