@@ -13,3 +13,8 @@ Follow these design system standards when working on this project:
 - Use responsive design patterns — mobile-first approach
 - Maintain a minimum touch target size of 44x44px for interactive elements
 - Follow the project's typography scale for headings and body text
+
+
+# Design System
+
+For the full design system specification (colors, typography, spacing, effects, and component tokens), see [DESIGN.md](../../DESIGN.md).

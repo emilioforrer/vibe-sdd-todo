@@ -1,6 +1,6 @@
 lockfile_version: '1'
-generated_at: '2026-04-25T18:12:10.213969+00:00'
-apm_version: 0.9.2
+generated_at: '2026-04-29T19:08:44.867885+00:00'
+apm_version: 0.9.4
 dependencies:
 - repo_url: CleanSlice/skills
   host: github.com
@@ -58,11 +58,11 @@ dependencies:
     .claude/agents/design-reviewer.md: sha256:616988766ebc7d42cc6f599a17d1ad3ab8164e139fad82e111af5441fe3986cb
     .claude/commands/accessibility-audit.md: sha256:6d5c7d5d0038683e5658f4a90cdee61b2fc3a27b3023fc63ed6649d1ea6b6b92
     .claude/commands/design-review.md: sha256:ed0741675cb37dd3fe77fbd199800582f745b4ee84e34ce6a92b8eb0bd6d7b81
-    .claude/rules/design-standards.md: sha256:5756b425ca79c83912e67102b32d623192bef7349ee7696275312b92c283a05e
+    .claude/rules/design-standards.md: sha256:6dd5fc2606e4bd43b8ddaa48428d92768bb4c0c7bf43c3f045dbb11c9ae5e7d0
     .cursor/agents/design-reviewer.md: sha256:616988766ebc7d42cc6f599a17d1ad3ab8164e139fad82e111af5441fe3986cb
-    .cursor/rules/design-standards.mdc: sha256:136481f1158a5678a3d07a6ca8044b83598463b2ed69adb6762a226372534c4b
+    .cursor/rules/design-standards.mdc: sha256:29bbdd35d6bb9b49a81c0668f0e96b976243d8f14469f0f864cc02283aaa72da
     .github/agents/design-reviewer.agent.md: sha256:616988766ebc7d42cc6f599a17d1ad3ab8164e139fad82e111af5441fe3986cb
-    .github/instructions/design-standards.instructions.md: sha256:6f5d994d6437416e14e4ca5540f4d1cf06fad079728a1419acfb1dd7038ec38d
+    .github/instructions/design-standards.instructions.md: sha256:96f7c30dd3926a95b40caeea0f3e9404b244c44ff281cc53c254cecf71f139af
     .github/prompts/accessibility-audit.prompt.md: sha256:c3382c6b7ac6ba38cf66d345923be79c5a46b8783a0d33aac457ff60f1b6597a
     .github/prompts/design-review.prompt.md: sha256:f10919f07eec83c62c7912e318382b472ad27eb1c22c11525b813522960e8e06
   content_hash: sha256:744cca54cc8ff7ca90aa1dd621c2f98c6291cd793815afe8518001cc94b8aba9
@@ -80,7 +80,7 @@ dependencies:
 - repo_url: vuejs-ai/skills
   host: github.com
   resolved_commit: c9d355ff23f654309dd02006be671859df0a134c
-  package_type: apm_package
+  package_type: marketplace_plugin
   deployed_files:
   - .claude/skills/create-adaptable-composable
   - .claude/skills/vue-best-practices
@@ -122,9 +122,15 @@ dependencies:
   content_hash: sha256:9236d06a1500089ddb46975b866e9a63478e502afe7095b1980c618678a7c7fe
 local_deployed_files:
 - .claude/agents/code-reviewer.md
+- .claude/rules/design-standards.md
 - .cursor/agents/code-reviewer.md
+- .cursor/rules/design-standards.mdc
 - .github/agents/code-reviewer.agent.md
+- .github/instructions/design-standards.instructions.md
 local_deployed_file_hashes:
   .claude/agents/code-reviewer.md: sha256:fc7743b863b1e55e40eaaac1c12ad1a51b719863557270cc99483b9aac31745d
+  .claude/rules/design-standards.md: sha256:6dd5fc2606e4bd43b8ddaa48428d92768bb4c0c7bf43c3f045dbb11c9ae5e7d0
   .cursor/agents/code-reviewer.md: sha256:fc7743b863b1e55e40eaaac1c12ad1a51b719863557270cc99483b9aac31745d
+  .cursor/rules/design-standards.mdc: sha256:29bbdd35d6bb9b49a81c0668f0e96b976243d8f14469f0f864cc02283aaa72da
   .github/agents/code-reviewer.agent.md: sha256:fc7743b863b1e55e40eaaac1c12ad1a51b719863557270cc99483b9aac31745d
+  .github/instructions/design-standards.instructions.md: sha256:96f7c30dd3926a95b40caeea0f3e9404b244c44ff281cc53c254cecf71f139af

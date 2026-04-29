@@ -2,6 +2,7 @@
 "github:microsoft/apm" = "latest"
 go = "latest"
 node = "latest"
+"npm:@google/design.md" = "latest"
 python = "latest"
 task = "latest"
 uv = "latest"

@@ -94,3 +94,9 @@ tasks:
     cmds:
       - docker run --rm --entrypoint sh --env-file devops/security/.env -v $(pwd)/:/workspace -w /workspace snyk/snyk:node -c "snyk test --json-file-output=devops/security/snyk-reports/snyk-results.json --sarif-file-output=devops/security/snyk-reports/snyk-results.sarif . || true && snyk code test --exclude=node_modules,.nuxt,.output,dist,build,coverage,devops,.git,.worktrees,.github,.specify,.crush,.kilocode,.vscode,specs,features --json-file-output=devops/security/snyk-reports/snyk-code-results.json --sarif-file-output=devops/security/snyk-reports/snyk-code-results.sarif . || true"
 
+  design:lint:
+    desc: Validate DESIGN.md against the Google design.md specification
+    dir: .
+    cmds:
+      - design.md lint DESIGN.md
+
