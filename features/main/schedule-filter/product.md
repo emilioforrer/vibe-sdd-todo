@@ -1,3 +1,10 @@
+## Design Reference
+
+- **Figma file**: [`DESIGN-VIBE-TODO-V1.fig`](../../../DESIGN-VIBE-TODO-V1.fig)
+- **Selected frame**: `App` (node `3:158`) — full app layout showing the redesigned light glassmorphism theme with header, progress tracker, task input with calendar picker, search/filter bar, and todo items
+
+![Figma selection — App frame](../../../DESIGN-VIBE-TODO-V1.fig#node=3:158)
+
 ## Context
 
 Vibe Todo is a task-tracking app built with Vue 3, Nuxt.js 3, and Tailwind CSS. The current design uses a dark retro 80s aesthetic with neon purple accents. The Figma design introduces a complete visual overhaul to a modern, light-themed UI with glassmorphism cards and a purple gradient palette, along with several new functional features.
