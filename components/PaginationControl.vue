@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   currentPage: number
   totalPages: number
 }>()
@@ -10,29 +10,31 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="flex items-center justify-center gap-4 mt-4">
+  <nav aria-label="Pagination" class="flex items-center justify-center gap-3 mt-2">
     <button
       :disabled="currentPage === 1"
-      class="px-3 py-1 border border-neon-violet/50 text-neon-violet/80 font-retro text-xs
-             hover:border-neon-violet hover:text-neon-violet transition-all duration-200
-             disabled:opacity-30 disabled:cursor-not-allowed"
+      class="min-w-[44px] min-h-[44px] px-4 py-2 bg-white/70 border border-[#E2E8F0] text-text-medium font-sans text-sm rounded-sm
+             hover:border-primary hover:text-primary transition-all duration-200
+             disabled:opacity-30 disabled:cursor-not-allowed
+             focus:outline-none focus:ring-2 focus:ring-primary/30"
       @click="emit('page-change', currentPage - 1)"
     >
-      ← PREV
+      ← Prev
     </button>
 
-    <span class="font-retro text-xs text-neon-violet">
-      PAGE {{ currentPage }} OF {{ totalPages }}
+    <span class="font-sans text-sm text-text-subtle">
+      {{ currentPage }} / {{ totalPages }}
     </span>
 
     <button
       :disabled="currentPage === totalPages"
-      class="px-3 py-1 border border-neon-violet/50 text-neon-violet/80 font-retro text-xs
-             hover:border-neon-violet hover:text-neon-violet transition-all duration-200
-             disabled:opacity-30 disabled:cursor-not-allowed"
+      class="min-w-[44px] min-h-[44px] px-4 py-2 bg-white/70 border border-[#E2E8F0] text-text-medium font-sans text-sm rounded-sm
+             hover:border-primary hover:text-primary transition-all duration-200
+             disabled:opacity-30 disabled:cursor-not-allowed
+             focus:outline-none focus:ring-2 focus:ring-primary/30"
       @click="emit('page-change', currentPage + 1)"
     >
-      NEXT →
+      Next →
     </button>
-  </div>
+  </nav>
 </template>

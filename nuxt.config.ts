@@ -14,8 +14,7 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      'Press Start 2P': true,
-      'Space Mono': [400, 700],
+      Inter: [400, 500],
     },
     display: 'swap',
     preload: true,

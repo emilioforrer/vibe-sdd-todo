@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Todo } from '~/types/todo'
-import { formatRelativeTime, formatAbsoluteTime } from '~/composables/useTodos'
 
 const props = defineProps<{
   todo: Todo
@@ -11,6 +10,7 @@ const emit = defineEmits<{
   toggle: [id: string]
   delete: [id: string]
   reorder: [fromIndex: number, toIndex: number]
+  'update-date': [id: string, date: string | undefined]
 }>()
 
 // --- Delete confirmation ---
@@ -70,14 +70,12 @@ function onHandlePointerDown(e: PointerEvent) {
 function onHandlePointerMove(e: PointerEvent) {
   if (e.pointerType !== 'touch') return
   if (!isPointerDragging) {
-    // Cancel long-press if intent is scroll
     if (Math.abs(e.clientY - pointerStartY) > 10 && longPressTimer) {
       clearTimeout(longPressTimer)
       longPressTimer = null
     }
     return
   }
-  // Compute drop index from pointer position
   const listEl = (e.currentTarget as HTMLElement).closest('ul')
   if (!listEl) return
   const items = Array.from(listEl.querySelectorAll('li'))
@@ -117,13 +115,23 @@ function onHandlePointerCancel() {
   isDragging.value = false
   pendingDropIndex = null
 }
+
+// --- Date formatting ---
+function formatScheduledDate(dateStr: string): string {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(dateStr + 'T00:00:00Z'))
+}
 </script>
 
 <template>
   <li
     :draggable="true"
-    class="flex items-center gap-3 px-4 py-3 border-b border-neon-violet/30 bg-dark-card last:border-b-0"
-    :class="isDragging ? 'scale-105 opacity-60 shadow-neon-sm z-10' : ''"
+    class="flex items-center gap-3 px-4 py-3 bg-glass-card-light rounded-md border border-[rgba(226,232,240,0.5)] last:border-b"
+    :class="isDragging ? 'scale-105 opacity-60 shadow-glass-sm z-10' : ''"
     @dragstart="onDragStart"
     @dragend="onDragEnd"
     @dragover="onDragOver"
@@ -131,47 +139,85 @@ function onHandlePointerCancel() {
   >
     <!-- Drag Handle -->
     <span
-      class="cursor-grab select-none text-neon-violet/60 hover:text-neon-violet font-mono shrink-0"
+      class="cursor-grab select-none text-text-placeholder hover:text-text-subtle shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center"
       style="touch-action: none"
       title="Drag to reorder"
       @pointerdown="onHandlePointerDown"
       @pointermove="onHandlePointerMove"
       @pointerup="onHandlePointerUp"
       @pointercancel="onHandlePointerCancel"
-    >⠿</span>
-
-    <!-- Checkbox -->
-    <input
-      :id="`todo-${todo.id}`"
-      type="checkbox"
-      :checked="todo.completed"
-      class="w-4 h-4 accent-neon-purple cursor-pointer shrink-0 transition-all duration-200"
-      @change="emit('toggle', todo.id)"
     >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <circle cx="7" cy="5" r="1.5" />
+        <circle cx="13" cy="5" r="1.5" />
+        <circle cx="7" cy="10" r="1.5" />
+        <circle cx="13" cy="10" r="1.5" />
+        <circle cx="7" cy="15" r="1.5" />
+        <circle cx="13" cy="15" r="1.5" />
+      </svg>
+    </span>
+
+    <!-- Circular Checkbox -->
+    <button
+      type="button"
+      class="shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200
+             min-w-[44px] min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary/40"
+      :class="todo.completed
+        ? 'border-primary bg-gradient-primary'
+        : 'border-[#E2E8F0] bg-transparent hover:border-primary'"
+      :aria-label="todo.completed ? 'Mark as pending' : 'Mark as completed'"
+      :aria-pressed="todo.completed"
+      @click="emit('toggle', todo.id)"
+    >
+      <svg
+        v-if="todo.completed"
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        fill="none"
+        class="text-white"
+        aria-hidden="true"
+      >
+        <path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
 
     <!-- Text + metadata -->
     <div class="flex-1 min-w-0">
-      <label
-        :for="`todo-${todo.id}`"
-        class="block font-mono text-sm cursor-pointer select-none transition-all duration-200"
-        :class="todo.completed ? 'text-gray-500 line-through opacity-50' : 'text-gray-100'"
+      <span
+        class="block font-sans text-base select-none transition-all duration-200"
+        :class="todo.completed ? 'text-text-placeholder line-through' : 'text-text-dark'"
       >
         {{ todo.text }}
-      </label>
+      </span>
       <span
-        class="font-mono text-xs text-neon-violet/50"
-        :title="todo.createdAt ? formatAbsoluteTime(todo.createdAt) : ''"
-      >{{ formatRelativeTime(todo.createdAt) }}</span>
+        v-if="todo.scheduledDate"
+        class="font-sans text-xs text-text-subtle"
+      >
+        {{ formatScheduledDate(todo.scheduledDate) }}
+      </span>
     </div>
 
-    <!-- Delete Button — always visible, high contrast -->
+    <!-- Date Picker for editing existing task date -->
+    <DatePicker
+      :model-value="todo.scheduledDate"
+      trigger-class="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-placeholder hover:text-primary
+                     focus:outline-none focus:ring-2 focus:ring-primary/30 rounded-sm transition-colors"
+      @update:model-value="(date) => emit('update-date', todo.id, date)"
+    />
+
+    <!-- Delete Button -->
     <button
-      class="text-neon-violet hover:text-red-400 hover:shadow-neon-sm font-retro text-sm
-             transition-all duration-200 shrink-0 px-1"
+      class="text-text-placeholder hover:text-error
+             transition-all duration-200 shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center
+             focus:outline-none focus:ring-2 focus:ring-error/30 rounded-sm"
       title="Delete todo"
+      aria-label="Delete todo"
       @click="showConfirm = true"
     >
-      ×
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+        <path d="M6 2h6M2 4h14M4 4l1 11a1 1 0 001 1h8a1 1 0 001-1L16 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+      </svg>
     </button>
 
     <!-- Confirmation Dialog -->
