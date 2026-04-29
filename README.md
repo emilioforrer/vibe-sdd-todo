@@ -33,8 +33,19 @@ Start the app along with security services (SonarQube, etc.):
 task up
 ```
 
-The app will be available at **http://localhost:3002**.
+The app will be available at **http://localhost:3003**.
 
+### V2 side-by-side comparison
+
+To run the v0.2.0 alongside the latest version (in a separate terminal):
+
+```bash
+task up:v2
+```
+
+> This automatically clones the [vibe-sdd-todo](https://github.com/emilioforrer/vibe-sdd-todo) repo as a git worktree at `.worktrees/vibe-sdd-todo-v2` if it doesn't already exist.
+
+The app will be available at **http://localhost:3002**.
 
 ### V1 side-by-side comparison
 
@@ -46,15 +57,8 @@ task up:v1
 
 > This automatically clones the [vibe-sdd-todo](https://github.com/emilioforrer/vibe-sdd-todo) repo as a git worktree at `.worktrees/vibe-sdd-todo-v1` if it doesn't already exist.
 
-### V2 side-by-side comparison
+The app will be available at **http://localhost:3001**.
 
-To run the v0.2.0 alongside the latest version (in a separate terminal):
-
-```bash
-task up:v2
-```
-
-> This automatically clones the [vibe-sdd-todo](https://github.com/emilioforrer/vibe-sdd-todo) repo as a git worktree at `.worktrees/vibe-sdd-todo-v2` if it doesn't already exist.
 
 ---
 
