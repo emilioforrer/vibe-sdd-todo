@@ -19,6 +19,14 @@ tasks:
     cmds:
       - docker-compose -f docker-compose.yml up
 
+  up:v2:
+    desc: Start the v0.2.0 worktree app via its docker-compose
+    deps: [clone:vibe-sdd-todo-v2]
+    dir: .worktrees/vibe-sdd-todo-v2
+    cmds:
+      - sed -i 's/"\([0-9]*\):80"/"3002:80"/' docker-compose.yml
+      - docker-compose -f docker-compose.yml up
+
   clone:vibe-sdd-todo-v1:
     desc: Add a git worktree of vibe-sdd-todo @ tag v0.1.0 at .worktrees/vibe-sdd-todo-v1
     dir: .
@@ -27,6 +35,22 @@ tasks:
       BARE_DIR: .worktrees/.bare/vibe-sdd-todo.git
       WORKTREE_DIR: .worktrees/vibe-sdd-todo-v1
       TAG: v0.1.0
+    cmds:
+      - mkdir -p .worktrees/.bare
+      - test -d {{.BARE_DIR}} || git clone --bare {{.REPO_URL}} {{.BARE_DIR}}
+      - git --git-dir={{.BARE_DIR}} fetch --tags origin
+      - git --git-dir={{.BARE_DIR}} worktree add --detach {{.WORKTREE_DIR}} refs/tags/{{.TAG}}
+    status:
+      - test -d {{.WORKTREE_DIR}}
+
+  clone:vibe-sdd-todo-v2:
+    desc: Add a git worktree of vibe-sdd-todo @ tag v0.2.0 at .worktrees/vibe-sdd-todo-v2
+    dir: .
+    vars:
+      REPO_URL: https://github.com/emilioforrer/vibe-sdd-todo
+      BARE_DIR: .worktrees/.bare/vibe-sdd-todo.git
+      WORKTREE_DIR: .worktrees/vibe-sdd-todo-v2
+      TAG: v0.2.0
     cmds:
       - mkdir -p .worktrees/.bare
       - test -d {{.BARE_DIR}} || git clone --bare {{.REPO_URL}} {{.BARE_DIR}}
