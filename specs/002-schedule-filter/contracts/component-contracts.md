@@ -91,7 +91,7 @@ interface DatePickerEmits {
 interface SearchFilterProps {
   searchQuery: string
   activeFilter: FilterStatus
-  allCount: number
+  totalCount: number
   pendingCount: number
   completedCount: number
   todayCount: number

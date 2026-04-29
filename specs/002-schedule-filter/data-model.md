@@ -30,7 +30,7 @@ export interface Todo {
 - `id`: Auto-generated via `crypto.randomUUID()`. Never user-provided.
 - `text`: Must be non-empty after trimming. Maximum 200 characters.
 - `completed`: Defaults to `false` on creation.
-- `createdAt`: Set to `Date.now()` on creation. Not backfilled for legacy todos (per existing FR-021).
+- `createdAt`: Set to `Date.now()` on creation. Not backfilled for legacy todos (prior feature decision from 001-ux-improvement).
 - `order`: Set to array length on creation. Updated on reorder.
 - `scheduledDate`: Optional. If provided, must be a valid ISO 8601 date string. No past-date restriction.
 
